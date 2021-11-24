@@ -1,0 +1,43 @@
+#VRML_SIM R2021a utf8
+PROTO CameraEnableRecognition [
+  field SFString name "camera"
+  field SFVec3f translation 0 0 0
+  field SFRotation rotation 0 1 0 0
+  field SFInt32 width       640        
+  field SFInt32 height      512
+  field SFFloat fieldOfView 0.0191986214
+  field SFFloat maxRange    2000
+]
+{
+  Camera {
+    name IS name
+    translation IS translation
+    rotation IS rotation
+    children [
+      Transform {
+        rotation 1 0 0 1.5707996938995747
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0 0 0
+              roughness 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.1
+              radius 0.05
+            }
+          }
+        ]
+      }
+    ]
+    width IS width
+    height IS height
+    fieldOfView IS fieldOfView
+    recognition Recognition {
+      maxRange IS maxRange
+      frameColor 0 1 0
+      frameThickness 3
+    }
+  }
+}

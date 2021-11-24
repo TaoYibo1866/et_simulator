@@ -1,0 +1,22 @@
+#VRML_SIM R2021a utf8
+PROTO LaserBeam [
+  field SFVec3f translation 0 0 0
+  field SFRotation rotation 0 1 0 0
+  field SFVec3f direction 1 0 0
+]
+{
+  Transform {
+    translation IS translation
+    rotation IS rotation
+    children [
+      SpotLight {
+        attenuation 0 0 0
+        beamWidth 0.01
+        color 1 0 0
+        cutOffAngle 0.01
+        direction IS direction
+        radius 300
+      }
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+  <param name="/use_sim_time" value="true"/>
+  <include file="$(find webots_ros)/launch/webots.launch">
+    <arg name="mode" value="pause"/>
+    <arg name="no_gui" value="false"/>
+    <arg name="world" value="$(find et_webots)/worlds/ET3116A.wbt"/>
+  </include>
+
+  <include file="$(find et_description)/launch/rviz.launch">
+    <arg name="model" value="ET3116A"/>
+    <arg name="namespace" value="ET3116A"/>
+  </include>
+  
+  <env name="LD_LIBRARY_PATH" value="$(env LD_LIBRARY_PATH):$(env WEBOTS_HOME)/lib/controller"/>
+  <node name="wb_controller" pkg="et_webots" type="wb_controller_node" output="screen" required="true"/>
+  
+  <node name="joy" pkg="joy" type="joy_node" output="screen"/>
+  <node name="joy_control" pkg="et_control" type="joy_node" output="screen"/>
+  <node name="sensor_character" pkg="et_control" type="sensor_character_node" output="screen"/>
+  <node name="estimation" pkg="et_control" type="estimation_node" output="screen"/>
+
+</launch>

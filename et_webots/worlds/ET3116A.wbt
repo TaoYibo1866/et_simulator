@@ -1,0 +1,62 @@
+#VRML_SIM R2021a utf8
+WorldInfo {
+  basicTimeStep 8
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation -0.4550610419162349 0.8466463766221732 0.27587925090998744 1.2428421809864079
+  position 3.9666123528072497 4.235293453345277 2.400282063500465
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+}
+ET3116A {
+  physics2 Physics {
+    density -1
+    mass 1e-06
+  }
+  physics3 Physics {
+    density -1
+    mass 1e-06
+  }
+  device1 [
+    PositionSensor {
+      name "encoder1"
+    }
+    RotationalMotor {
+      name "motor1"
+      maxTorque 10000
+    }
+  ]
+  device2 [
+    PositionSensor {
+      name "encoder2"
+    }
+    RotationalMotor {
+      name "motor2"
+      maxTorque 10000
+    }
+  ]
+  supervisor TRUE
+  controller "<extern>"
+  loadExtensionSlot [
+    InertialUnit {
+      rotation -1 0 0 1.57081
+    }
+    Gyro {
+    }
+    CameraEnableRecognition {
+      translation 0.4 0 0
+      rotation 0 1 0 -1.5707953071795862
+    }
+    LaserBeam {
+    }
+  ]
+}
+M100 {
+  translation 300 0 0
+  model "target"
+}

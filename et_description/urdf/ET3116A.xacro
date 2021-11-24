@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+
+<robot name="ET3116A" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find et_description)/urdf/common.xacro" />
+
+  <!-- Properties -->
+  <xacro:property name="namespace" value="$(arg namespace)" />
+  
+  <link name="${namespace}/base1">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.35"/>
+      <geometry>
+        <cylinder length="0.6" radius="0.3"/>
+      </geometry>
+      <xacro:material_white/>
+    </visual>
+  </link>
+
+  <joint name="${namespace}/joint1" type="revolute">
+    <axis xyz="0 0 -1"/>
+    <origin xyz="0 0 1.051" rpy="0 0 0"/>
+    <limit lower="${-pi / 2}" upper="${pi / 2}" effort="100" velocity="100"/>
+    <parent link="${namespace}/base1"/>
+    <child link="${namespace}/base2"/>
+  </joint>
+
+  <link name="${namespace}/base2">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.6 0.6 0.6"/>
+      </geometry>
+      <xacro:material_white/>
+    </visual>
+  </link>
+  
+  <joint name="${namespace}/joint2" type="revolute">
+    <axis xyz="0 -1 0"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <limit lower="${-pi / 2}" upper="${pi / 2}" effort="100" velocity="100"/>
+    <parent link="${namespace}/base2"/>
+    <child link="${namespace}/load"/>
+  </joint>
+
+  <link name="${namespace}/load">
+    <visual>
+      <origin rpy="0 ${pi/2} 0" xyz="0 0.8 0"/>
+      <geometry>
+        <box size="0.5 0.5 1"/>
+      </geometry>
+      <xacro:material_grey/>
+    </visual>
+    <visual>
+      <origin rpy="0 ${pi/2} 0" xyz="0 -0.8 0"/>
+      <geometry>
+        <cylinder length="1" radius="0.3"/>
+      </geometry>
+      <xacro:material_grey/>
+    </visual>
+  </link>
+
+</robot>

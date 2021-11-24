@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+  
+  <arg name="model" default="ET3116A"/>
+  <arg name="namespace" default="ET3116A"/>
+
+  <!-- send the robot XML to param server -->
+  <param name="robot_description" command="
+    $(find xacro)/xacro.py '$(find et_description)/urdf/$(arg model).xacro'
+    namespace:=$(arg namespace)
+    "/>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    <remap from="joint_states" to="joints_groundtruth"/>
+  </node>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find et_description)/rviz/default.rviz"/>
+  
+</launch>
