@@ -24,14 +24,6 @@ void cmdCb(Twist msg)
 
 int main(int argc, char** argv)
 {
-  // ros setup
-  ros::init(argc, argv, "wb_controller");
-  ros::NodeHandle nh;
-  ros::Publisher clock_pub = nh.advertise<Clock>("/clock", 1);
-  ros::Publisher detect_gth_pub = nh.advertise<Detection>("detection_groundtruth", 1);
-  ros::Publisher joints_gth_pub = nh.advertise<JointState>("joints_groundtruth", 1);
-  ros::Subscriber cmd_sub = nh.subscribe<Twist>("cmd_vel", 1, cmdCb);
-
   // webots setup
   Robot* robot = new Robot;
   int timestep = (int)robot->getBasicTimeStep();
@@ -49,6 +41,14 @@ int main(int argc, char** argv)
   camera->enable(timestep);
   if (camera->hasRecognition())
     camera->recognitionEnable(timestep);
+
+  // ros setup
+  ros::init(argc, argv, "wb_controller");
+  ros::NodeHandle nh;
+  ros::Publisher clock_pub = nh.advertise<Clock>("/clock", 1);
+  ros::Publisher detect_gth_pub = nh.advertise<Detection>("detection_groundtruth", 1);
+  ros::Publisher joints_gth_pub = nh.advertise<JointState>("joints_groundtruth", 1);
+  ros::Subscriber cmd_sub = nh.subscribe<Twist>("cmd_vel", 1, cmdCb);
 
   while (ros::ok() && robot->step(timestep) != -1)
   {

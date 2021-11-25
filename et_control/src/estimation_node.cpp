@@ -11,7 +11,6 @@ using sensor_msgs::JointState;
 using et_msgs::Detection;
 using et_msgs::Estimation;
 
-KalmanFilter kf;
 double joint1;
 double joint2;
 
@@ -25,7 +24,8 @@ void detectCb(Detection msg)
 {
   static ros::NodeHandle nh;
   static ros::Publisher est_pub = nh.advertise<Estimation>("estimation", 1);
-  
+  static KalmanFilter kf;
+
   if (!kf.isInitialized())
   {
     if (msg.valid)
@@ -36,7 +36,10 @@ void detectCb(Detection msg)
   else
   {
     kf.predict(TIMESTEP);
-    kf.correct1(msg.horz, msg.vert, msg.dist, joint1, joint2, 30e-6, 10);
+    if (msg.valid)
+    {
+      kf.correct1(msg.horz, msg.vert, msg.dist, joint1, joint2, 30e-6, 10);
+    }
   }
 
   Estimation est;
@@ -46,16 +49,19 @@ void detectCb(Detection msg)
   }
   else
   {
+    est.Z[0] = msg.horz;
+    est.Z[1] = msg.vert;
+    est.Z[2] = msg.dist;
+
     array<double,  3> Zhat = kf.getZhat(joint1, joint2);
-    array<double,  6> Xhat = kf.getXhat();
-    array<double, 36> P    = kf.getP();
-
-    for (int i = 0; i < 6; ++i)
-      est.Xhat[i] = Xhat[i];
-
     for (int i = 0; i < 3; ++i)
       est.Zhat[i] = Zhat[i];
 
+    array<double,  6> Xhat = kf.getXhat();
+    for (int i = 0; i < 6; ++i)
+      est.Xhat[i] = Xhat[i];
+
+    array<double, 36> P    = kf.getP();
     for (int i = 0; i < 36; ++i)
       est.P[i] = P[i];
   }

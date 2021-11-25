@@ -117,7 +117,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-#  include
+# include
   ${catkin_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIR}
 )
@@ -170,6 +170,13 @@ add_executable(${PROJECT_NAME}_estimation_node src/estimation_node.cpp src/Kalma
 set_target_properties(${PROJECT_NAME}_estimation_node PROPERTIES OUTPUT_NAME estimation_node)
 add_dependencies(${PROJECT_NAME}_estimation_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_estimation_node
+  ${catkin_LIBRARIES}
+)
+
+add_executable(${PROJECT_NAME}_pose_controller_node src/pose_controller_node.cpp)
+set_target_properties(${PROJECT_NAME}_pose_controller_node PROPERTIES OUTPUT_NAME pose_controller_node)
+add_dependencies(${PROJECT_NAME}_pose_controller_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME}_pose_controller_node
   ${catkin_LIBRARIES}
 )
 
