@@ -4,7 +4,7 @@
 #include <et_msgs/Estimation.h>
 #include "KalmanFilter.h"
 
-#define TIMESTEP 0.008
+#define CTRL_PERIOD 0.01
 
 using std::array;
 using sensor_msgs::JointState;
@@ -35,7 +35,7 @@ void detectCb(Detection msg)
   }
   else
   {
-    kf.predict(TIMESTEP);
+    kf.predict(CTRL_PERIOD);
     if (msg.valid)
     {
       kf.correct1(msg.horz, msg.vert, msg.dist, joint1, joint2, 30e-6, 10);
@@ -43,11 +43,8 @@ void detectCb(Detection msg)
   }
 
   Estimation est;
-  if (!msg.valid)
-  {
-    est.valid = false;
-  }
-  else
+  est.valid = msg.valid;
+  if (msg.valid)
   {
     est.Z[0] = msg.horz;
     est.Z[1] = msg.vert;

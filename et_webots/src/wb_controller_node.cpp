@@ -11,15 +11,15 @@
 using namespace webots;
 using rosgraph_msgs::Clock;
 using geometry_msgs::Twist;
+using geometry_msgs::TwistConstPtr;
 using sensor_msgs::JointState;
 using et_msgs::Detection;
 
-double vel1 = 0;
-double vel2 = 0;
-void cmdCb(Twist msg)
+
+void cmdCb(TwistConstPtr msg, Motor* motor1, Motor* motor2)
 {
-  vel1 = msg.angular.z;
-  vel2 = msg.angular.y;
+  motor1->setVelocity(msg->angular.z);
+  motor2->setVelocity(msg->angular.y);
 }
 
 int main(int argc, char** argv)
@@ -48,7 +48,7 @@ int main(int argc, char** argv)
   ros::Publisher clock_pub = nh.advertise<Clock>("/clock", 1);
   ros::Publisher detect_gth_pub = nh.advertise<Detection>("detection_groundtruth", 1);
   ros::Publisher joints_gth_pub = nh.advertise<JointState>("joints_groundtruth", 1);
-  ros::Subscriber cmd_sub = nh.subscribe<Twist>("cmd_vel", 1, cmdCb);
+  ros::Subscriber cmd_sub = nh.subscribe<Twist>("cmd_vel", 1, boost::bind(cmdCb, _1, motor1, motor2));
 
   while (ros::ok() && robot->step(timestep) != -1)
   {
@@ -87,11 +87,9 @@ int main(int argc, char** argv)
       }
     }
     detect_gth_pub.publish(detect);
-
+    
     // update cmd, 0 <= delay < timestep, due to asynchronization
     ros::spinOnce();
-    motor1->setVelocity(vel1);
-    motor2->setVelocity(vel2);
   }
   delete robot;
   return 0;

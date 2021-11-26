@@ -15,9 +15,8 @@
   <env name="LD_LIBRARY_PATH" value="$(env LD_LIBRARY_PATH):$(env WEBOTS_HOME)/lib/controller"/>
   <node name="wb_controller" pkg="et_webots" type="wb_controller_node" output="screen" required="true"/>
   
-  <node name="joy" pkg="joy" type="joy_node" output="screen"/>
-  <node name="joy_control" pkg="et_control" type="joy_node" output="screen"/>
   <node name="sensor_character" pkg="et_control" type="sensor_character_node" output="screen"/>
   <node name="estimation" pkg="et_control" type="estimation_node" output="screen"/>
+  <node name="pose_controller" pkg="et_control" type="pose_controller_node" output="screen"/>
 
 </launch>

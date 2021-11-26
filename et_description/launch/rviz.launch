@@ -6,7 +6,7 @@
 
   <!-- send the robot XML to param server -->
   <param name="robot_description" command="
-    $(find xacro)/xacro.py '$(find et_description)/urdf/$(arg model).xacro'
+    $(find xacro)/xacro '$(find et_description)/urdf/$(arg model).xacro'
     namespace:=$(arg namespace)
     "/>
 
