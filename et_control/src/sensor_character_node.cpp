@@ -3,7 +3,7 @@
 #include <random>
 #include <deque>
 
-#define FREQ_FACTOR 2
+#define FREQ_DIV 2
 #define CACHE_SIZE 6
 #define RESOLUTION 30e-6
 #define HORZ_VERT_STDDEV 20e-6
@@ -33,7 +33,7 @@ void detectCb(Detection msg)
   while (cache.size() > CACHE_SIZE)
     cache.pop_front();
 
-  cnt = cnt % FREQ_FACTOR;
+  cnt = cnt % FREQ_DIV;
   if (cnt == 0)
   {
     Detection measured;

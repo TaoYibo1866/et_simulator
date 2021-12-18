@@ -4,7 +4,7 @@
 #include <et_msgs/Estimation.h>
 #include "KalmanFilter.h"
 
-#define CTRL_PERIOD 0.01
+#define PREDICT_PERIOD 0.01
 
 using std::array;
 using sensor_msgs::JointState;
@@ -35,7 +35,7 @@ void detectCb(Detection msg)
   }
   else
   {
-    kf.predict(CTRL_PERIOD);
+    kf.predict(PREDICT_PERIOD);
     if (msg.valid)
     {
       kf.correct1(msg.horz, msg.vert, msg.dist, joint1, joint2, 30e-6, 10);
@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 {
 
   ros::init(argc, argv, "estimation");
-  sensor_msgs::JointStateConstPtr joints_msg = ros::topic::waitForMessage<JointState>("joints_groundtruth");
+  sensor_msgs::JointState::ConstPtr joints_msg = ros::topic::waitForMessage<JointState>("joints_groundtruth");
   joint1 = joints_msg->position[0];
   joint2 = joints_msg->position[1];
 

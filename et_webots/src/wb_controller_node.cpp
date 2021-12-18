@@ -11,12 +11,11 @@
 using namespace webots;
 using rosgraph_msgs::Clock;
 using geometry_msgs::Twist;
-using geometry_msgs::TwistConstPtr;
 using sensor_msgs::JointState;
 using et_msgs::Detection;
 
 
-void cmdCb(TwistConstPtr msg, Motor* motor1, Motor* motor2)
+void cmdCb(Twist::ConstPtr msg, Motor* motor1, Motor* motor2)
 {
   motor1->setVelocity(msg->angular.z);
   motor2->setVelocity(msg->angular.y);

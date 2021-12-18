@@ -4,6 +4,9 @@
 
 #define CTRL_PERIOD 0.01
 
+#define DEG2RAD M_PI / 180
+#define CLAMP(x, lb, ub) x < lb ? lb : x > ub ? ub : x
+
 using et_msgs::Estimation;
 using geometry_msgs::Twist;
 
@@ -26,8 +29,8 @@ PIController::PIController()
 
 double PIController::getCtrl(double Kp, double Ki, double e, double dt)
 {
-  double du = Kp * (e - prev_e_) + Ki * e * dt;
-  double u = prev_u_ + du;
+  double du = CLAMP(Kp * (e - prev_e_) + Ki * e * dt, -INFINITY, INFINITY);
+  double u = CLAMP(prev_u_ + du, -INFINITY, INFINITY);
   prev_e_ = e;
   prev_u_ = u;
   return u;
