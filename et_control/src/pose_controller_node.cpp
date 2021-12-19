@@ -2,7 +2,7 @@
 #include <et_msgs/Estimation.h>
 #include <geometry_msgs/Twist.h>
 
-#define CTRL_PERIOD 0.01
+#define CTRL_PERIOD 0.002 // s
 
 #define DEG2RAD M_PI / 180
 #define CLAMP(x, lb, ub) x < lb ? lb : x > ub ? ub : x
@@ -49,8 +49,8 @@ void estCb(Estimation msg)
     double vert = msg.Z[1];
 
     Twist cmd;
-    cmd.angular.z = horz_controller.getCtrl(20, 100, horz, CTRL_PERIOD);
-    cmd.angular.y = vert_controller.getCtrl(20, 100, vert, CTRL_PERIOD);
+    cmd.angular.z = horz_controller.getCtrl(20, 120, horz, CTRL_PERIOD);
+    cmd.angular.y = vert_controller.getCtrl(20, 120, vert, CTRL_PERIOD);
     cmd_pub.publish(cmd);
   }
   else

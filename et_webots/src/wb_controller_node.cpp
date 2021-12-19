@@ -14,6 +14,8 @@ using geometry_msgs::Twist;
 using sensor_msgs::JointState;
 using et_msgs::Detection;
 
+#define POSITION_SENSOR_PERIOD_MS 2
+#define CAMERA_PERIOD_MS 10
 
 void cmdCb(Twist::ConstPtr msg, Motor* motor1, Motor* motor2)
 {
@@ -23,6 +25,8 @@ void cmdCb(Twist::ConstPtr msg, Motor* motor1, Motor* motor2)
 
 int main(int argc, char** argv)
 {
+  ros::init(argc, argv, "wb_controller");
+
   // webots setup
   Robot* robot = new Robot;
   int timestep = (int)robot->getBasicTimeStep();
@@ -34,15 +38,13 @@ int main(int argc, char** argv)
   motor2->setVelocity(0);
   PositionSensor* encoder1 = robot->getPositionSensor("encoder1");
   PositionSensor* encoder2 = robot->getPositionSensor("encoder2");
-  encoder1->enable(timestep);
-  encoder2->enable(timestep);
+  encoder1->enable(POSITION_SENSOR_PERIOD_MS);
+  encoder2->enable(POSITION_SENSOR_PERIOD_MS);
   Camera* camera = robot->getCamera("camera");
-  camera->enable(timestep);
-  if (camera->hasRecognition())
-    camera->recognitionEnable(timestep);
+  camera->enable(CAMERA_PERIOD_MS);
+  camera->recognitionEnable(CAMERA_PERIOD_MS);
 
   // ros setup
-  ros::init(argc, argv, "wb_controller");
   ros::NodeHandle nh;
   ros::Publisher clock_pub = nh.advertise<Clock>("/clock", 1);
   ros::Publisher detect_gth_pub = nh.advertise<Detection>("detection_groundtruth", 1);
@@ -57,19 +59,22 @@ int main(int argc, char** argv)
     clock_pub.publish(clock);
     
     // pub sensor data immediately
-    JointState joints;
-    joints.header.stamp = clock.clock;
-    joints.name.push_back("ET3116A/joint1");
-    joints.name.push_back("ET3116A/joint2");
-    joints.position.push_back(encoder1->getValue());
-    joints.position.push_back(encoder2->getValue());
-    joints_gth_pub.publish(joints);
-
-    Detection detect;
-    detect.header.stamp = clock.clock;
-    detect.valid = false;
-    if (camera->hasRecognition())
+    if ((int)(t * 1000) % POSITION_SENSOR_PERIOD_MS == 0)
     {
+      JointState joints;
+      joints.header.stamp = clock.clock;
+      joints.name.push_back("ET3116A/joint1");
+      joints.name.push_back("ET3116A/joint2");
+      joints.position.push_back(encoder1->getValue());
+      joints.position.push_back(encoder2->getValue());
+      joints_gth_pub.publish(joints);
+    }
+    
+    if ((int)(t * 1000) % CAMERA_PERIOD_MS == 0)
+    {
+      Detection detect;
+      detect.header.stamp = clock.clock;
+      detect.valid = false;
       const CameraRecognitionObject* objs = camera->getRecognitionObjects();
       for (int i = 0; i < camera->getRecognitionNumberOfObjects(); i++)
       {
@@ -84,10 +89,9 @@ int main(int argc, char** argv)
           detect.dist = sqrt(x*x + y*y + z*z);
         }
       }
+      detect_gth_pub.publish(detect);
     }
-    detect_gth_pub.publish(detect);
     
-    // update cmd, 0 <= delay < timestep, due to asynchronization
     ros::spinOnce();
   }
   delete robot;

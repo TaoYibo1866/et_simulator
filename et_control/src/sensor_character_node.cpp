@@ -3,8 +3,8 @@
 #include <random>
 #include <deque>
 
-#define FREQ_DIV 2
-#define CACHE_SIZE 6
+#define FREQ_DIV 1                  // freq = freq / div
+#define CACHE_SIZE 3                // delay = period * size
 #define RESOLUTION 30e-6
 #define HORZ_VERT_STDDEV 20e-6
 #define DIST_STDDEV 10
