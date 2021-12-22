@@ -6,6 +6,7 @@
 $ sudo dpkg -i webots_2021a_amd64.deb
 $ sudo echo "export WEBOTS_HOME=/usr/local/webots" >> ~/.bashrc
 $ source ~/.bashrc
+$ sudo apt-get install libeigen3-dev
 $ sudo apt-get install ros-noetic-webots-ros
 $ sudo apt-get install ros-noetic-joy
 ```
@@ -18,5 +19,8 @@ $ catkin_make
 ```
 ## Run
 ```Bash
-$ roslaunch et_webots tracking.launch
+$ roslaunch et_webots ET3116A_M100.launch
+$ roslaunch et_webots atp_control.launch
+$ roslaunch et_webots uav_control.launch
 ```
+![image](demo.png)
