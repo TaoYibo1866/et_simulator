@@ -136,7 +136,7 @@ void KalmanFilter::correctFcn1(Eigen::Matrix<double, 3, 1> Z, Eigen::Matrix<doub
   K = P_ * H.transpose() * (H * P_ * H.transpose() + R).inverse();
   X_ = X_ + K * (Z - Zhat);
   P_ = P_ - K * H * P_;
-  P_ = (P_ + P_.transpose()) / 2;
+  P_ = (P_ + P_.transpose().eval()) / 2;
 }
 
 void KalmanFilter::correctFcn2(Eigen::Matrix<double, 2, 1> Z, Eigen::Matrix<double, 2, 2> R, Eigen::Matrix3d cRw)
@@ -170,7 +170,7 @@ void KalmanFilter::correctFcn2(Eigen::Matrix<double, 2, 1> Z, Eigen::Matrix<doub
   K = P_ * H.transpose() * (H * P_ * H.transpose() + R).inverse();
   X_ = X_ + K * (Z - Zhat);
   P_ = P_ - K * H * P_;
-  P_ = (P_ + P_.transpose()) / 2;
+  P_ = (P_ + P_.transpose().eval()) / 2;
 }
 
 void KalmanFilter::correctFcn3(Eigen::Matrix<double, 1, 1> Z, Eigen::Matrix<double, 1, 1> R, Eigen::Matrix3d cRw)
@@ -200,7 +200,7 @@ void KalmanFilter::correctFcn3(Eigen::Matrix<double, 1, 1> Z, Eigen::Matrix<doub
   K = P_ * H.transpose() * (H * P_ * H.transpose() + R).inverse();
   X_ = X_ + K * (Z - Zhat);
   P_ = P_ - K * H * P_;
-  P_ = (P_ + P_.transpose()) / 2;
+  P_ = (P_ + P_.transpose().eval()) / 2;
 }
 
 void KalmanFilter::predict(double dt)

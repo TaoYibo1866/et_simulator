@@ -15,6 +15,7 @@ TexturedBackgroundLight {
 Floor {
 }
 ET3116A {
+  name "ET3116A"
   physics2 Physics {
     density -1
     mass 1e-06
@@ -58,7 +59,29 @@ ET3116A {
     }
   ]
 }
+
 M100 {
   translation 300 1 0
+  name "M100"
   model "target"
+  physics Physics {
+    density -1
+    mass 2.70703
+    centerOfMass [
+      0 0 0
+    ]
+    inertiaMatrix [
+      0.0341171 0.0363089 0.0627386
+      0 0 0
+    ]
+  }
+  controller "<extern>"
+  bodySlot [
+    Gyro {
+    }
+    InertialUnit {
+    }
+    GPS {
+    }
+  ]
 }

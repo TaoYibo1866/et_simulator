@@ -22,7 +22,7 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "joy");
   ros::NodeHandle nh;
   cmd_pub = nh.advertise<Twist>("cmd_vel", 1);
-  ros::Subscriber joy_sub = nh.subscribe<Joy>("joy", 1, joyCb);
+  ros::Subscriber joy_sub = nh.subscribe<Joy>("joy", 1, joyCb, ros::TransportHints().tcpNoDelay());
   ros::spin();
   return 0;
 }

@@ -54,7 +54,7 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "sensor_character");
   ros::NodeHandle nh;
-  ros::Subscriber detect_sub = nh.subscribe<Detection>("detection_groundtruth", 1, detectCb);
+  ros::Subscriber detect_sub = nh.subscribe<Detection>("detection_groundtruth", 1, detectCb, ros::TransportHints().tcpNoDelay());
   ros::spin();
   return 0;
 }

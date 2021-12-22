@@ -107,9 +107,9 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "estimation");
 
   ros::NodeHandle nh;
-  ros::Subscriber joints_sub = nh.subscribe<JointState>("joints_groundtruth", 1, jointsCb);
-  ros::Subscriber detect_sub = nh.subscribe<Detection>("detection_measured", 1, detectCb);
-  ros::Subscriber filter_sub = nh.subscribe<Int8>("filter_event", 1, filterCb);
+  ros::Subscriber joints_sub = nh.subscribe<JointState>("joints_groundtruth", 1, jointsCb, ros::TransportHints().tcpNoDelay());
+  ros::Subscriber detect_sub = nh.subscribe<Detection>("detection_measured", 1, detectCb, ros::TransportHints().tcpNoDelay());
+  ros::Subscriber filter_sub = nh.subscribe<Int8>("filter_event", 1, filterCb, ros::TransportHints().tcpNoDelay());
   ros::spin();
   return 0;
 }

@@ -2,7 +2,10 @@
 PROTO LaserBeam [
   field SFVec3f translation 0 0 0
   field SFRotation rotation 0 1 0 0
-  field SFVec3f direction 1 0 0
+  field SFVec3f direction   1 0 0
+  field SFFloat beamWidth   0.001
+  field SFFloat cutOffAngle 0.001
+  field SFFloat radius      2000
 ]
 {
   Transform {
@@ -11,11 +14,11 @@ PROTO LaserBeam [
     children [
       SpotLight {
         attenuation 0 0 0
-        beamWidth 0.01
+        beamWidth IS beamWidth
         color 1 0 0
-        cutOffAngle 0.01
+        cutOffAngle IS cutOffAngle
         direction IS direction
-        radius 300
+        radius IS radius
       }
     ]
   }

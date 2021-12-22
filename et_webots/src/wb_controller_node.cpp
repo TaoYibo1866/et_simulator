@@ -26,6 +26,10 @@ void cmdCb(Twist::ConstPtr msg, Motor* motor1, Motor* motor2)
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "wb_controller");
+  int publish_clock = 1;
+  if (argc == 2)
+    publish_clock = atoi(argv[1]);
+  ROS_INFO("publish_clock = %d", publish_clock);
 
   // webots setup
   Robot* robot = new Robot;
@@ -49,14 +53,15 @@ int main(int argc, char** argv)
   ros::Publisher clock_pub = nh.advertise<Clock>("/clock", 1);
   ros::Publisher detect_gth_pub = nh.advertise<Detection>("detection_groundtruth", 1);
   ros::Publisher joints_gth_pub = nh.advertise<JointState>("joints_groundtruth", 1);
-  ros::Subscriber cmd_sub = nh.subscribe<Twist>("cmd_vel", 1, boost::bind(cmdCb, _1, motor1, motor2));
+  ros::Subscriber cmd_sub = nh.subscribe<Twist>("cmd_vel", 1, boost::bind(cmdCb, _1, motor1, motor2), ros::VoidConstPtr(), ros::TransportHints().tcpNoDelay());
 
   while (ros::ok() && robot->step(timestep) != -1)
   {
     double t = robot->getTime();
     Clock clock;
     clock.clock.fromSec(t);
-    clock_pub.publish(clock);
+    if (publish_clock)
+      clock_pub.publish(clock);
     
     // pub sensor data immediately
     if ((int)(t * 1000) % POSITION_SENSOR_PERIOD_MS == 0)

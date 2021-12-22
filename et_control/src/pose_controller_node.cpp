@@ -66,7 +66,7 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "pose_controller");
   ros::NodeHandle nh;
-  ros::Subscriber est_sub = nh.subscribe<Estimation>("estimation", 1, estCb);
+  ros::Subscriber est_sub = nh.subscribe<Estimation>("estimation", 1, estCb, ros::TransportHints().tcpNoDelay());
   ros::spin();
   return 0;
 }
